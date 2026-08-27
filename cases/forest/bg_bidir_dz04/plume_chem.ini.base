@@ -1,0 +1,205 @@
+[master]
+npx=96
+npy=48
+
+[grid]
+itot=None
+jtot=None
+ktot=None
+lat=None
+lon=None
+xsize=None.
+ysize=None.
+zsize=None.
+swspatialorder=2
+
+[advec]
+swadvec=2i5
+cflmax=1.0
+fluxlimit_list=None
+
+[limiter]
+limitlist=None
+
+[diff]
+swdiff=smag2
+dnmax=0.4
+
+[thermo]
+swthermo=moist
+swbasestate=anelastic
+thvref0=300
+pbot=101325.
+
+[force]
+swlspres=0
+swls=0
+swwls=0
+swnudge=1
+swtimedep_nudge=0
+nudgelist=qt
+
+[boundary]
+swboundary=None
+mbcbot=noslip
+mbctop=freeslip
+sbcbot=flux
+sbcbot[thl]=dirichlet
+sbcbot[qt]=dirichlet
+sbctop=neumann
+sbot=0
+sbot[qt]=0.1e-3
+sbot[thl]=-1
+stop=0
+stop[thl]=-1
+stop[qt]=-2.8e-7
+swconstantz0=1
+z0m=0.75
+z0h=0.075
+swtimedep=None
+timedeplist=None
+scalar_outflow=None
+flow_direction[north]=outflow
+flow_direction[east]=outflow
+flow_direction[south]=outflow
+flow_direction[west]=inflow
+thl=dirichlet
+qt=dirichlet
+
+[land_surface]
+swhomogeneous=0
+swfreedrainage=1
+swtilestats=1
+swtilestats_column=1
+switerseb=0
+swwater=1
+ktot=4
+
+[column]
+swcolumn=1
+sampletime=60
+coordinates[x]=100,3840
+coordinates[y]=2880,1920
+
+[radiation]
+swradiation=None
+swtimedep_prescribed=1
+emis_sfc=0.97
+max_rad=None
+
+[fields]
+visc=1.e-5
+svisc=1.e-5
+slist=None
+rndseed=2
+rndamp[thl]=0.1
+rndz=300.0
+rndexp=2.0
+
+[source]
+swsource=0
+sourcelist=None
+source_x0=None
+source_y0=None
+source_z0=None
+sigma_x=None
+sigma_y=None
+sigma_z=None
+strength=None
+swvmr=None
+line_x=None
+line_y=None
+line_z=None
+
+
+[chemistry]
+swchemistry = None
+
+lifetime = 1e30 # Set to a very large value to effectively disable chemical decay,
+
+# Target-reference-height formulation
+# If enabled, the code checks whether the lowest model level is below
+# the estimated roughness sublayer height z_star.
+sw_adapt_ref_height = 1
+
+# If false, the code uses c_low directly when z_low >= z_star,
+# and only interpolates to z_ref when z_low < z_star.
+# If true, the code always uses the selected reference height.
+sw_force_ref_height = 0
+
+# Definition of the target reference height used when interpolation is required.
+# true  : z_ref = z_fixed
+# false : z_ref = rsl_ratio * z0m
+sw_const_ref_height = 1
+z_fixed = 20.0
+
+# Roughness sublayer estimate:
+# z_star = rsl_ratio * z0m.
+# With the manuscript assumption h_c = 10 z0m,
+# rsl_ratio = 20 corresponds to z_star = 2 h_c.
+rsl_ratio = 20.0
+
+# Levels used to compute c_* for target-height interpolation.
+# true  : use kstart and kstart+1
+# false : use the two LES levels bracketing z_ref
+sw_use_lowest_levels = 0
+
+
+[deposition]
+swdeposition = None
+use_depac = 1  # true: use DEPAC | false: use original resistance scheme
+
+# Compensation point override [only used if use_depac = true]
+sw_override_ccomp = 0  # true: fix ccomp_tot to ccomp_override_value (disables DEPAC compensation point calculation)
+ccomp_override_value = 0.0  # fixed compensation point [ug m-3] (used if sw_override_ccomp = true)
+
+# DEPAC inputs [only used if use_depac = true]
+c_ave_prev_nh3 = 5.0  # long-term average NH3 concentration [ug m-3]; drives stomatal compensation point via gamma_stom = 362 * c_ave_prev_nh3 * 4.7 * exp(-0.071*T)
+iratns = 2  # NH3/SO2 ratio regime: 1=low (<0.5 ppb SO2 or 0.02<=ratio<=2) | 2=high (ratio>2) | 3=very low (ratio<0.02)
+hlaw = 61.0  # effective Henry's law constant [M atm-1]
+react = 0.0  # reactivity factor [-] (0.0 for NH3)
+
+# Wetness indicators per tile: 0=dry | 1=wet | 9=snow
+nwet_veg = 0  # vegetation tile
+nwet_soil = 0  # bare soil tile
+nwet_wet = 1  # wet skin tile (intercepted water); always 1 by definition
+
+[buffer]
+swbuffer=1
+zstart=2000.0
+sigma=0.00223
+beta=2.0
+
+[time]
+endtime=None
+dt=6.0
+dtmax=30.0
+savetime=3600
+outputiter=5
+adaptivestep=true
+starttime=0
+rkorder=3
+datetime_utc=None
+
+[stats]
+swstats=1
+sampletime=60
+swtendency = true
+xymasklist= None
+
+[budget]
+swbudget=1
+
+[cross]
+swcross=1
+sampletime=60
+crosslist=None
+# crosslist=u,v,flux_nh3,flux_inst,nh3,nh3_path,vdnh3,vdnh3_soil,vdnh3_wet,vdnh3_veg,ra,rb,obuk,ustar,ccomp_tot,cw,cstom,csoil_eff,cw_out,cstom_out,csoil_out,rc_tot,rc_eff,ra_soil,rb_soil,obuk_soil,ustar_soil,ra_wet,rb_wet,obuk_wet,ustar_wet,ra_veg,rb_veg,obuk_veg,ustar_veg,rh_surface, T_surface, c_diff_flux, flux_nh3_mol_ha_yr
+xy=2,6,10,14,18,22,26,30,34,38
+yz=0,5,10,15,20,890,900,910,1390,1400,1410,2390,2400,2410,3390,3400,3410,4390,4400,4410,5390,5400,5410,6390,6400,6410,7390,7400,7410,7660,7665,7670,7675,7680
+xz=1920.0,3640.0
+
+[dump]
+swdump=0
+sampletime=60
+dumplist=u,v
