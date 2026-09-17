@@ -165,8 +165,8 @@ below for which files each script reads.
 
 Final PNG/PDF versions of all manuscript figures are included in the
 `figures/` directory. Figures 1 and 2 are static schematics reproduced or
-adapted from other publications (van Zanten et al., 2010; Basu et al., 2017)
-and have no generating script.
+adapted from other publications (van Zanten et al., 2010; Basu and Lacser,
+2017) and have no generating script.
 
 Run each script from the root directory of this repository.
 
@@ -214,18 +214,18 @@ dynamics code for direct numerical simulation and large-eddy simulation
 of atmospheric boundary layer flows, Geosci. Model Dev., 10, 3145-3165,
 https://doi.org/10.5194/gmd-10-3145-2017, 2017.
 
-van Zanten, M. C., Sauter, F., Wichink Kruit, R. J., Van Jaarsveld, J. A.,
-and Van Pul, W. A. J.: Description of the DEPAC module: Dry deposition
-modelling with DEPAC_GCN2010, RIVM Report 680180001, 2010.
+van Zanten, M. C., Sauter, F. J., Kruit, R. J. W., and van Jaarsveld, J. A.:
+Description of the DEPAC Module, 2010.
 
-Geers, [initials]: [title of DEPAC implementation reference], 2025.
-[Full citation to be completed -- matches \citet{geersImplementationDryDeposition2025}
-in the manuscript bibliography.]
+Geers, L., Janssen, R., Thorkelsdottir, G., Vila-Guerau De Arellano, J.,
+and Schaap, M.: Implementation of a Dry Deposition Module (DEPAC v3.11)
+in a Large Eddy Simulation Code (DALES v4.4),
+https://doi.org/10.5194/egusphere-2025-426, 2025.
 
-Basu, S., Holtslag, A. A. M., van de Wiel, B. J. H., Moene, A. F., and
-Steeneveld, G. J.: An inconvenient "truth" about using sensible heat flux
-as a surface boundary condition in models under stably stratified regimes,
-Boundary-Layer Meteorol., 165, 371-384, 2017.
+Basu, S. and Lacser, A.: A Cautionary Note on the Use of Monin-Obukhov
+Similarity Theory in Very High-Resolution Large-Eddy Simulations,
+Boundary-Layer Meteorology, 163, 351-355,
+https://doi.org/10.1007/s10546-016-0225-y, 2017.
 
 ---
 
