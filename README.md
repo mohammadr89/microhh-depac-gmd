@@ -184,12 +184,12 @@ Run each script from the root directory of this repository.
                                                                           forest/bg_bidir_dz16
     fD1.py                                    Fig. D1 (Appendix D)        theoretical illustration, no case output
     fE1.py                                    Fig. E1 (Appendix E)        prescribed radiative forcing, no case output
-    analysis_forest_refheight_deposition.py   Sect. 5.2			  forest/bg_onedir_dz04
+    analysis_forest_refheight_deposition.py   Sect. 5.2					  forest/bg_onedir_dz04
                                                                           forest/bg_onedir_no_target_height_dz04
-                                                                          forest/bg_bidir_dz04
+    analysis_forest_bidir_deposition.py       Sect. 5.2                   forest/bg_bidir_dz04
     analysis_forest_grassland_deposition.py   Sect. 6.1                   grassland/bg_onedir_dz04
                                                                           forest/bg_onedir_dz04
-                                                                          forest/bg_onedir_no_target_height_dz04
+                                                                          forest/bg_onedir_no_target_height_dz04																		  
 
 ### Python dependencies
 
@@ -235,3 +235,4 @@ Mohamadreza Rashidi
 Meteorology and Air Quality Group
 Wageningen University & Research
 mohamadreza.rashidi@wur.nl
+
