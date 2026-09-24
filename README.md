@@ -10,7 +10,7 @@ reference-height formulation, Geoscientific Model Development, 2026
 
 ---
 
-## Model code
+## Model code and data archives
 
 MicroHH-DEPAC is a fork of the MicroHH large-eddy simulation model
 (van Heerwaarden et al., 2017) with the DEPAC dry deposition module
@@ -24,12 +24,19 @@ archived at:
 
     https://doi.org/10.5281/zenodo.22131443  (release v1.0.0-GMD)
 
-This repository (input data, configuration files, and analysis scripts) is
-archived separately at:
+This repository (input data, configuration files, selected model output,
+and analysis scripts) is archived at:
+
+    https://doi.org/10.5281/zenodo.XXXXXXXX
+
+The full raw model output (NetCDF, approximately 54 GB) is archived
+separately at:
 
     https://doi.org/10.5281/zenodo.22230061
 
-Licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+Licence of this repository: Creative Commons Attribution 4.0 International
+(CC BY 4.0). The model code in the microdepac repository is licensed
+separately under GPL-3.0.
 
 Original MicroHH copyright: Chiel van Heerwaarden, Thijs Heus, and MicroHH
 contributors (base code: https://github.com/microhh/microhh). The DEPAC
@@ -43,21 +50,21 @@ from https://github.com/dalesteam/dales/blob/ruisdael_deposition/src/le_drydepos
 
     cases/
         grassland/
-            bg_bidir_dz04/                    Case 1, Scenario A: background NH3 only
-            bg_onedir_dz04/                   Case 1, Scenario A: background only, unidirectional
-            ps_onedir_dz04/                   Case 1, Scenario B: point source, unidirectional
-            ps_bidir_dz04/                    Case 1, Scenario B: point source, bidirectional
-            psbg_bidir_dz04/                  Case 1, Scenario C: point source + background
+            bg_bidir_dz04/                     Case 1, Scenario A: background only, bidirectional
+            bg_onedir_dz04/                    Case 1, Scenario A: background only, unidirectional
+            ps_onedir_dz04/                    Case 1, Scenario B: point source, unidirectional
+            ps_bidir_dz04/                     Case 1, Scenario B: point source, bidirectional
+            psbg_bidir_dz04/                   Case 1, Scenario C: point source + background, bidirectional
         forest/
-            bg_bidir_dz04/                     Case 2, Scenario A: dz = 4 m
-            bg_bidir_dz08/                     Case 2, Scenario A: dz = 8 m
-            bg_bidir_dz12/                     Case 2, Scenario A: dz = 12 m
-            bg_bidir_dz16/                     Case 2, Scenario A: dz = 16 m
-            bg_bidir_no_target_height_dz04/    Case 2, Scenario A: dz = 4 m, lowest-level sampling
-            bg_onedir_dz04/                    Case 2, Scenario A: unidirectional, reference-height sampling
-            bg_onedir_no_target_height_dz04/   Case 2, Scenario A: unidirectional, lowest-level sampling
+            bg_bidir_dz04/                     Case 2, Scenario A: bidirectional, reference-height sampling, dz = 4 m
+            bg_bidir_dz08/                     Case 2, Scenario A: bidirectional, reference-height sampling, dz = 8 m
+            bg_bidir_dz12/                     Case 2, Scenario A: bidirectional, reference-height sampling, dz = 12 m
+            bg_bidir_dz16/                     Case 2, Scenario A: bidirectional, reference-height sampling, dz = 16 m
+            bg_bidir_no_target_height_dz04/    Case 2, Scenario A: bidirectional, lowest-level sampling, dz = 4 m
+            bg_onedir_dz04/                    Case 2, Scenario A: unidirectional, reference-height sampling, dz = 4 m
+            bg_onedir_no_target_height_dz04/   Case 2, Scenario A: unidirectional, lowest-level sampling, dz = 4 m
     figures/                   Final figures as they appear in the manuscript
-    scripts/                   Python scripts to reproduce Figs. 3-7, D1, E1, and the
+    scripts/                   Python scripts to reproduce Figs. 2-7, D1, E1, and the
                                 deposition-flux comparisons in Sect. 5.2 and 6.1
     shared_inputs/             Common files copied into a case before running
     LICENSE                    Creative Commons Attribution 4.0 International
@@ -121,8 +128,8 @@ repository:
 
 Selected NetCDF output files used by the analysis scripts (e.g.
 `flux_inst.xy.nc`, `nh3_first_level_xy.nc`, `ccomp_tot.xy.nc`) are included
-in the case directories that require them; see the figure/script mapping
-below for which files each script reads.
+in the case directories that require them. The table in the section on
+reproducing the figures lists which cases each script uses.
 
 ---
 
@@ -164,14 +171,15 @@ below for which files each script reads.
 ## How to reproduce the figures and reported numbers
 
 Final PNG/PDF versions of all manuscript figures are included in the
-`figures/` directory. Figures 1 and 2 are static schematics reproduced or
-adapted from other publications (van Zanten et al., 2010; Basu and Lacser,
-2017) and have no generating script.
+`figures/` directory. Figure 1 is a schematic adapted from van Zanten et al.
+(2010) and has no generating script. Figure 2 is adapted from Basu and
+Lacser (2017) and is produced by `f02.py`.
 
 Run each script from the root directory of this repository.
 
     Script                                    Produces                    Cases used
     -------------------------------------------------------------------------------------------------------
+    f02.py                                    Fig. 2                      theoretical illustration, no case output
     f03.py                                    Fig. 3                      grassland/ps_onedir_dz04
                                                                           grassland/psbg_bidir_dz04
     f04_a.py                                  Fig. 4a                     grassland/bg_bidir_dz04
@@ -184,12 +192,12 @@ Run each script from the root directory of this repository.
                                                                           forest/bg_bidir_dz16
     fD1.py                                    Fig. D1 (Appendix D)        theoretical illustration, no case output
     fE1.py                                    Fig. E1 (Appendix E)        prescribed radiative forcing, no case output
-    analysis_forest_refheight_deposition.py   Sect. 5.2					  forest/bg_onedir_dz04
+    analysis_forest_refheight_deposition.py   Sect. 5.2                   forest/bg_onedir_dz04
                                                                           forest/bg_onedir_no_target_height_dz04
     analysis_forest_bidir_deposition.py       Sect. 5.2                   forest/bg_bidir_dz04
     analysis_forest_grassland_deposition.py   Sect. 6.1                   grassland/bg_onedir_dz04
                                                                           forest/bg_onedir_dz04
-                                                                          forest/bg_onedir_no_target_height_dz04																		  
+                                                                          forest/bg_onedir_no_target_height_dz04
 
 ### Python dependencies
 
@@ -214,8 +222,10 @@ dynamics code for direct numerical simulation and large-eddy simulation
 of atmospheric boundary layer flows, Geosci. Model Dev., 10, 3145-3165,
 https://doi.org/10.5194/gmd-10-3145-2017, 2017.
 
-van Zanten, M. C., Sauter, F. J., Kruit, R. J. W., and van Jaarsveld, J. A.:
-Description of the DEPAC Module, 2010.
+van Zanten, M. C., Sauter, F. J., Wichink Kruit, R. J., van Jaarsveld,
+J. A., and van Pul, W. A. J.: Description of the DEPAC module: Dry
+deposition modelling with DEPAC_GCN2010, RIVM Report 680180001/2010,
+RIVM, Bilthoven, the Netherlands, 2010.
 
 Geers, L., Janssen, R., Thorkelsdottir, G., Vila-Guerau De Arellano, J.,
 and Schaap, M.: Implementation of a Dry Deposition Module (DEPAC v3.11)
@@ -235,4 +245,3 @@ Mohamadreza Rashidi
 Meteorology and Air Quality Group
 Wageningen University & Research
 mohamadreza.rashidi@wur.nl
-
