@@ -197,7 +197,7 @@ try:
     ax_flux.yaxis.set_ticks_position('left')
     ax_flux.patch.set_visible(False)
     ax_flux.plot(time_hours, data_flux, '-', color=COLOR_FLUX, linewidth=2.0, zorder=10)
-    ax_flux.set_ylabel('Deposition flux magnitude, -F$_{NH_3}$ (ng m⁻² s⁻¹)',
+    ax_flux.set_ylabel(r'Deposition flux magnitude, $-F_\mathrm{inst}$ (ng m$^{-2}$ s$^{-1}$)',
                        fontsize=8, fontweight='bold', color=COLOR_FLUX)
     ax_flux.tick_params(axis='y', labelcolor=COLOR_FLUX, labelsize=9)
     ax_flux.set_ylim(0, vmax_flux_rounded)
@@ -220,7 +220,7 @@ try:
         mlines.Line2D([], [], color=COLOR_NH3,  linewidth=2.0, label='NH₃ (µg m⁻³)'),
         mlines.Line2D([], [], color=COLOR_VD,   linewidth=2.0, label='Exchange velocity (cm s⁻¹)'),
         mlines.Line2D([], [], color=COLOR_FLUX, linewidth=2.0,
-                      label='Deposition flux magnitude, -F$_{NH_3}$ (ng m⁻² s⁻¹)'),
+                      label=r'Deposition flux magnitude, $-F_\mathrm{inst}$ (ng m$^{-2}$ s$^{-1}$)'),
         mlines.Line2D([], [], color='orange', marker='o', linestyle='None',
                       markersize=6, label='Sunrise & sunset'),
     ]

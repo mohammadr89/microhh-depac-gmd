@@ -15,12 +15,10 @@ plt.rcParams.update({
     'font.size':          12,
     'axes.titlesize':     16,
     'axes.labelsize':     14,
-    'axes.labelweight':   'bold',
     'xtick.labelsize':    12,
     'ytick.labelsize':    12,
     'legend.fontsize':    12,
     'figure.titlesize':   16,
-    'figure.titleweight': 'bold',
 })
 
 EMISSION_RATE     = 4e-5   # kg/s  (4 sources x 0.01 g/s each)
@@ -146,9 +144,6 @@ def analyze_difference(psbg_file, bg_file, start_time=None, end_time=None):
 
 def _style_ax(ax, x_all):
     ax.tick_params(axis='both', which='major', labelsize=12)
-    for lbl in ax.get_xticklabels() + ax.get_yticklabels():
-        lbl.set_fontweight('bold')
-
     ax.axvspan(min(x_all), max(x_all), color=GRASS_COLOR, alpha=0.3, label='Grassland')
     _draw_source_marker(ax, SOURCE_X_POSITION, radius_pts=10, color='r')
     ax.set_xlim(left=0, right=X_MAX)
@@ -169,16 +164,25 @@ def _print_statistics(results, labels):
                 print(f"    {dist:5d} m : {cumul[idx] * 100:.2f} %")
 
 
+def _print_difference(results, labels):
+    total1 = results[0][2][-1]
+    total2 = results[1][2][-1]
+    diff_pct = (total2 - total1) / total1 * 100
+    print(f"\n--- Difference ({labels[1]} vs {labels[0]}) ---")
+    print(f"  {labels[0]}: {total1 * 100:.2f} %")
+    print(f"  {labels[1]}: {total2 * 100:.2f} %")
+    print(f"  Difference : {diff_pct:+.2f} %")
+
+
 def plot_results(results, labels, colors, output_name='f03'):
-    label_font = {'fontsize': 14, 'fontweight': 'bold'}
-    x_all      = results[0][0]
+    x_all = results[0][0]
 
     fig, ax = plt.subplots(figsize=(10, 6))
     _style_ax(ax, x_all)
     for (x, _, cumul), label, color in zip(results, labels, colors):
         ax.plot(x, cumul * 100, color=color, linewidth=2, label=label)
-    ax.set_xlabel('X Coordinate (m)', **label_font)
-    ax.set_ylabel('Cumulative Deposition (%)', **label_font)
+    ax.set_xlabel(r'$x$ (m)')
+    ax.set_ylabel('Cumulative deposition (%)')
     ax.set_ylim(bottom=0)
     ax.legend(loc='upper left')
     fig.tight_layout()
@@ -188,16 +192,6 @@ def plot_results(results, labels, colors, output_name='f03'):
 
     _print_statistics(results, labels)
     _print_difference(results, labels)
-
-
-def _print_difference(results, labels):
-    total1 = results[0][2][-1]
-    total2 = results[1][2][-1]
-    diff_pct = (total2 - total1) / total1 * 100
-    print(f"\n--- Difference ({labels[1]} vs {labels[0]}) ---")
-    print(f"  {labels[0]}: {total1 * 100:.2f} %")
-    print(f"  {labels[1]}: {total2 * 100:.2f} %")
-    print(f"  Difference : {diff_pct:+.2f} %")
 
 
 def main():

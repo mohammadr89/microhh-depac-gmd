@@ -13,19 +13,19 @@ reference-height formulation, Geoscientific Model Development, 2026
 ## Model code and data archives
 
 MicroHH-DEPAC is a fork of the MicroHH large-eddy simulation model
-(van Heerwaarden et al., 2017) with the DEPAC dry deposition module
+(van Heerwaarden et al., 2017) with the DEPAC surface-exchange module
 (van Zanten et al., 2010) integrated. The model source code, build
 instructions, and installation are maintained in a separate repository:
 
     https://github.com/mohammadr89/microdepac
 
-The exact version of the code used to produce the results in this paper is
+The MicroHH-DEPAC v1.0 code used in this study (release v1.0.0-GMD) is
 archived at:
 
-    https://doi.org/10.5281/zenodo.22131443  (release v1.0.0-GMD)
+    https://doi.org/10.5281/zenodo.22131443
 
-This repository (input data, configuration files, selected model output,
-and analysis scripts) is archived at:
+This repository (simulation configuration files, post-processing scripts,
+and the model output underlying the figures and analyses) is archived at:
 
     https://doi.org/10.5281/zenodo.XXXXXXXX
 
@@ -35,14 +35,26 @@ separately at:
     https://doi.org/10.5281/zenodo.22230061
 
 Licence of this repository: Creative Commons Attribution 4.0 International
-(CC BY 4.0). The model code in the microdepac repository is licensed
-separately under GPL-3.0.
+(CC BY 4.0), with the exceptions listed below. The model code is distributed
+under the GNU General Public License v3.0.
+
+Exceptions to the CC BY 4.0 licence:
+
+- `shared_inputs/microhh_tools.py` and `shared_inputs/lsm_input.py` are taken
+  from MicroHH and remain under the GNU General Public License v3.0.
+- The RRTMGP coefficient files in `shared_inputs/` are distributed under the
+  licence of the rte-rrtmgp repository
+  (https://github.com/earth-system-radiation/rte-rrtmgp).
+
+The public MicroHH model and its installation instructions are available at:
+
+    https://microhh.readthedocs.io/en/latest/getting_started/code_and_compilation.html
 
 Original MicroHH copyright: Chiel van Heerwaarden, Thijs Heus, and MicroHH
 contributors (base code: https://github.com/microhh/microhh). The DEPAC
 module was adapted from the implementation by Geers et al. (2025), obtained
-from https://github.com/dalesteam/dales/blob/ruisdael_deposition/src/le_drydepos_gas_depac.f90
-(commit c8d343e). DEPAC coupling additions: Mohamadreza Rashidi (2025).
+from https://github.com/dalesteam/dales/blob/c8d343e/src/le_drydepos_gas_depac.f90.
+DEPAC coupling additions: Mohamadreza Rashidi (2025).
 
 ---
 
@@ -64,7 +76,7 @@ from https://github.com/dalesteam/dales/blob/ruisdael_deposition/src/le_drydepos
             bg_onedir_dz04/                    Case 2, Scenario A: unidirectional, reference-height sampling, dz = 4 m
             bg_onedir_no_target_height_dz04/   Case 2, Scenario A: unidirectional, lowest-level sampling, dz = 4 m
     figures/                   Final figures as they appear in the manuscript
-    scripts/                   Python scripts to reproduce Figs. 2-7, D1, E1, and the
+    scripts/                   Python scripts to reproduce Figs. 2–7, D1, E1, and the
                                 deposition-flux comparisons in Sect. 5.2 and 6.1
     shared_inputs/             Common files copied into a case before running
     LICENSE                    Creative Commons Attribution 4.0 International
@@ -156,15 +168,15 @@ reproducing the figures lists which cases each script uses.
 
        python plume_chem_input.py
 
-5. Run MicroHH:
+5. Copy the compiled `microhh` executable into the case directory and run:
 
-       mpirun -n N microhh init plume_chem
-       mpirun -n N microhh run plume_chem
+       mpirun -n N ./microhh init plume_chem
+       mpirun -n N ./microhh run plume_chem
 
    where N is the number of MPI tasks. The simulations in this paper were run
-   on the Snellius supercomputer (NWO, the Netherlands). The finest-resolution
-   case (dz = 4 m, 24-hour simulation) required approximately 5 x 10^4 CPU
-   hours.
+   on the Snellius supercomputer (SURF, the Netherlands), with computing time
+   provided by NWO (grant no. NWO-2025.010). The finest-resolution case
+   (dz = 4 m, 24-hour simulation) required approximately 5 x 10^4 core hours.
 
 ---
 
@@ -182,8 +194,7 @@ Run each script from the root directory of this repository.
     f02.py                                    Fig. 2                      theoretical illustration, no case output
     f03.py                                    Fig. 3                      grassland/ps_onedir_dz04
                                                                           grassland/psbg_bidir_dz04
-    f04_a.py                                  Fig. 4a                     grassland/bg_bidir_dz04
-    f04_b.py                                  Fig. 4b                     grassland/bg_bidir_dz04
+    f04.py                                    Fig. 4 (a, b)               grassland/bg_bidir_dz04
     f05.py                                    Fig. 5 (a, b)               grassland/psbg_bidir_dz04
     f06.py                                    Fig. 6                      grassland/ps_bidir_dz04
     f07.py                                    Fig. 7                      forest/bg_bidir_dz04
@@ -195,6 +206,7 @@ Run each script from the root directory of this repository.
     analysis_forest_refheight_deposition.py   Sect. 5.2                   forest/bg_onedir_dz04
                                                                           forest/bg_onedir_no_target_height_dz04
     analysis_forest_bidir_deposition.py       Sect. 5.2                   forest/bg_bidir_dz04
+                                                                          forest/bg_bidir_no_target_height_dz04
     analysis_forest_grassland_deposition.py   Sect. 6.1                   grassland/bg_onedir_dz04
                                                                           forest/bg_onedir_dz04
                                                                           forest/bg_onedir_no_target_height_dz04
@@ -219,7 +231,7 @@ Install with:
 van Heerwaarden, C. C., van Stratum, B. J. H., Heus, T., Gibbs, J. A.,
 Fedorovich, E., and Mellado, J. P.: MicroHH 1.0: a computational fluid
 dynamics code for direct numerical simulation and large-eddy simulation
-of atmospheric boundary layer flows, Geosci. Model Dev., 10, 3145-3165,
+of atmospheric boundary layer flows, Geosci. Model Dev., 10, 3145–3165,
 https://doi.org/10.5194/gmd-10-3145-2017, 2017.
 
 van Zanten, M. C., Sauter, F. J., Wichink Kruit, R. J., van Jaarsveld,
@@ -227,14 +239,14 @@ J. A., and van Pul, W. A. J.: Description of the DEPAC module: Dry
 deposition modelling with DEPAC_GCN2010, RIVM Report 680180001/2010,
 RIVM, Bilthoven, the Netherlands, 2010.
 
-Geers, L., Janssen, R., Thorkelsdottir, G., Vila-Guerau De Arellano, J.,
-and Schaap, M.: Implementation of a Dry Deposition Module (DEPAC v3.11)
-in a Large Eddy Simulation Code (DALES v4.4),
-https://doi.org/10.5194/egusphere-2025-426, 2025.
+Geers, L., Janssen, R., Thorkelsdottir, G., Vilà-Guerau de Arellano, J.,
+and Schaap, M.: Implementation of a dry deposition module (DEPAC v3.11_ext)
+in a large eddy simulation code (DALES v4.4), Geosci. Model Dev., 18,
+6647–6669, https://doi.org/10.5194/gmd-18-6647-2025, 2025.
 
 Basu, S. and Lacser, A.: A Cautionary Note on the Use of Monin-Obukhov
 Similarity Theory in Very High-Resolution Large-Eddy Simulations,
-Boundary-Layer Meteorology, 163, 351-355,
+Boundary-Layer Meteorology, 163, 351–355,
 https://doi.org/10.1007/s10546-016-0225-y, 2017.
 
 ---

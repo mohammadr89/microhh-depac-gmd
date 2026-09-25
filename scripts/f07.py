@@ -24,7 +24,7 @@ plt.rcParams.update({
 RES_COLORS = {
     '4m':  '#009E73',
     '8m':  '#DE8F05',
-    '12m':  '#0173B2',
+    '12m': '#0173B2',
     '16m': '#CC3311',
 }
 RESOLUTIONS = ('4m', '8m', '12m', '16m')
@@ -67,7 +67,7 @@ def load_all(t_start=10800, t_end=86400):
         raw_nh3[r] = load_nh3(paths_nh3[r])
 
     t_comm = common_times(*[raw_ct[r][0]  for r in RESOLUTIONS],
-                           *[raw_nh3[r][0] for r in RESOLUTIONS])
+                          *[raw_nh3[r][0] for r in RESOLUTIONS])
     t_comm = t_comm[(t_comm >= t_start) & (t_comm <= t_end)]
 
     ct, nh3 = {}, {}
@@ -79,18 +79,23 @@ def load_all(t_start=10800, t_end=86400):
 
 
 def mean_spread(d):
-    stack    = np.vstack([d[r] for r in RESOLUTIONS])   # (4, T)
-    envelope = stack.max(axis=0) - stack.min(axis=0)     # (T,)
+    stack    = np.vstack([d[r] for r in RESOLUTIONS])
+    envelope = stack.max(axis=0) - stack.min(axis=0)
     return float(envelope.mean())
 
 def overall_mean(d):
     return float(np.mean([np.mean(d[r]) for r in RESOLUTIONS]))
 
 
+def panel_label(ax, label):
+    ax.text(-0.08, 1.03, label, transform=ax.transAxes,
+            fontsize=13, fontweight='bold', va='bottom', ha='left')
+
+
 def plot(hours, ct, nh3, stem='f07'):
     fig, (ax_nh3, ax_ct) = plt.subplots(1, 2, figsize=(16, 6),
-                                         sharey=False,
-                                         gridspec_kw={'wspace': 0.12})
+                                        sharey=False,
+                                        gridspec_kw={'wspace': 0.12})
 
     xticks = np.arange(int(hours[0]), int(hours[-1]) + 1, 3)
 
@@ -114,19 +119,18 @@ def plot(hours, ct, nh3, stem='f07'):
     ax_nh3.set_xticks(xticks)
     ax_nh3.set_xlabel('Time of day (h)', fontsize=13)
     ax_nh3.set_ylabel('Mole fraction (nmol mol$^{-1}$)', fontsize=13)
-    ax_nh3.set_title('NH₃ surface mole fraction', fontweight='bold', fontsize=15)
+    ax_nh3.set_title('Lowest-level mole fraction', fontweight='bold', fontsize=15)
     ax_nh3.grid(True, alpha=0.4)
     ax_nh3.legend(title='Δz', framealpha=0.9, fontsize=11,
                   title_fontsize=11, loc='lower right')
     ax_nh3.text(0.04, 0.97,
-                f'Mean spread:  {spread_nh3:.2f} nmol mol$^{{-1}}$  ({pct_nh3:.0f}% of mean)',
+                f'Mean spread:  {spread_nh3:.3f} nmol mol$^{{-1}}$  ({pct_nh3:.1f}% of mean)',
                 transform=ax_nh3.transAxes, fontsize=12, va='top', ha='left',
                 color='#222222',
                 bbox=dict(boxstyle='round,pad=0.4', fc='#fff3f3', ec='#CC3311', lw=1.2))
 
     for res, color in RES_COLORS.items():
         ax_ct.plot(hours, ct[res], color=color, lw=2.2, label=res)
-
     ax_ct.fill_between(hours, stack_ct.min(axis=0), stack_ct.max(axis=0),
                        color='#888888', alpha=0.15, zorder=0)
     ax_ct.set_xlim(hours[0], hours[-1])
@@ -134,7 +138,7 @@ def plot(hours, ct, nh3, stem='f07'):
     ax_ct.set_xticks(xticks)
     ax_ct.set_xlabel('Time of day (h)', fontsize=13)
     ax_ct.set_ylabel('Mole fraction (nmol mol$^{-1}$)', fontsize=13)
-    ax_ct.set_title('Reference height mole fraction', fontweight='bold', fontsize=15)
+    ax_ct.set_title('Reference-height mole fraction', fontweight='bold', fontsize=15)
     ax_ct.grid(True, alpha=0.4)
     ax_ct.legend(title='Δz', framealpha=0.9, fontsize=11,
                  title_fontsize=11, loc='lower right')
@@ -144,6 +148,9 @@ def plot(hours, ct, nh3, stem='f07'):
                color='#222222',
                bbox=dict(boxstyle='round,pad=0.4', fc='#f0f7ff', ec='#0173B2', lw=1.2))
 
+    panel_label(ax_nh3, '(a)')
+    panel_label(ax_ct,  '(b)')
+
     fig.tight_layout()
     fig.savefig(f'{stem}.png', dpi=300, facecolor='white', edgecolor='none',
                 format='png', bbox_inches='tight')
@@ -152,12 +159,14 @@ def plot(hours, ct, nh3, stem='f07'):
     plt.close(fig)
     print(f'Saved {stem}.png, {stem}.pdf')
 
+
 def main():
     print('Loading data ...')
     hours, ct, nh3 = load_all()
     print(f'  {len(hours)} timesteps  ({hours[0]:.1f} – {hours[-1]:.1f} h)')
     plot(hours, ct, nh3)
     print('Done.')
+
 
 if __name__ == '__main__':
     main()
